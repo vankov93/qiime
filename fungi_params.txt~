@@ -1,0 +1,11 @@
+pick_otus:enable_rev_strand_match True
+assign_taxonomy:assignment_method blast
+assign_taxonomy:id_to_taxonomy_fp /home/qiime/ITS/sh_qiime_release_s_20.11.2016/sh_taxonomy_qiime_ver7_97_s_20.11.2016.txt
+assign_taxonomy:reference_seqs_fp /home/qiime/ITS/sh_qiime_release_s_20.11.2016/sh_refs_qiime_ver7_97_s_20.11.2016.fasta
+
+
+
+
+
+
+

@@ -1,0 +1,27 @@
+#! /bin/bash
+ls | sort -n > list.txt;python3 /home/qiime/ETALON/join_pair.py > join.sh;bash join.sh;cd joined;rm fastqjoin.un1.fastq;rm fastqjoin.un2.fastq;ls | sort -n  > list2.txt;sed -e 's/list2.txt//g' list2.txt | sed -e 's/Fasting_Map.txt//g' | awk NF | paste -s -d ',' > list.txt;python3 /home/qiime/ETALON/splitmake.py > split.sh;python3 /home/qiime/ETALON/makemap.py > Fasting_Map.txt;
+
+
+
+bash split.sh;identify_chimeric_seqs.py -i  split/seqs.fna -m usearch61 -o chimeras -r /usr/local/lib/python2.7/dist-packages/qiime_default_reference/gg_13_8_otus/rep_set/97_otus.fasta;filter_fasta.py -f  split/seqs.fna -o norm.fna -s chimeras/chimeras.txt -n;grep -c "_" chimeras/non_chimeras.txt > non_chimeras.txt;grep -c "_" chimeras/chimeras.txt > chimeras.txt;python3 /home/qiime/ETALON/splitinfa.py > otchet.txt;awk '{print $2}' otchet.txt > nreads.txt;pick_open_reference_otus.py -i norm.fna -o open -a --min_otu_size 5;assign_taxonomy.py -i open/rep_set.fna -m rdp -c 0.8 -o rdp_assigned_taxonomy;make_otu_table.py -i open/final_otu_map_mc5.txt -t rdp_assigned_taxonomy/rep_set_tax_assignments.txt -o otu_table.biom;sort_otu_table.py -i otu_table.biom -o otus_sort.biom -m Fasting_Map.txt;summarize_taxa.py -i otus_sort.biom -o taxasum;summarize_taxa.py -i otus_sort.biom -o taxasum -L 7;alpha_diversity.py -i otus_sort.biom -o alpha.txt -t open/rep_set.tre -m chao1,simpson,shannon,PD_whole_tree,fisher_alpha;python3 /home/qiime/ETALON/makearar.py > arare.sh;bash arare.sh;beta_diversity_through_plots.py -i otus_sort.biom -o beta -m Fasting_Map.txt -t open/rep_set.tre -a;make_3d_plots.py -i /beta/unweighted_unifrac_pc.txt -m Fasting_Map.txt -o 3d_plots/;make_2d_plots.py -i beta/unweighted_unifrac_pc.txt -m Fasting_Map.txt -o 2d_plots/;make_2d_plots.py -i beta/weighted_unifrac_pc.txt -m Fasting_Map.txt -o 2d_plots/
+
+
+
+
+
+bash split.sh;identify_chimeric_seqs.py -i  split/seqs.fna -m usearch61 -o chimeras -r /usr/local/lib/python2.7/dist-packages/qiime_default_reference/gg_13_8_otus/rep_set/97_otus.fasta;filter_fasta.py -f  split/seqs.fna -o norm.fna -s chimeras/chimeras.txt -n;grep -c "_" chimeras/non_chimeras.txt > non_chimeras.txt;grep -c "_" chimeras/chimeras.txt > chimeras.txt;python3 /home/qiime/ETALON/splitinfa.py > otchet.txt;awk '{print $2}' otchet.txt > nreads.txt;pick_open_reference_otus.py -i norm.fna -o open -a --min_otu_size 5;assign_taxonomy.py -i open/rep_set.fna -m rdp -c 0.8 -o rdp_assigned_taxonomy;make_otu_table.py -i open/final_otu_map_mc5.txt -t rdp_assigned_taxonomy/rep_set_tax_assignments.txt -o otu_table.biom;sort_otu_table.py -i otu_table.biom -o otus_sort.biom -m Fasting_Map.txt;summarize_taxa.py -i otus_sort.biom -o taxasum;summarize_taxa.py -i otus_sort.biom -o taxasum -L 7;alpha_diversity.py -i otus_sort.biom -o alpha.txt -t open/rep_set.tre -m chao1,simpson,shannon,PD_whole_tree,fisher_alpha;python3 /home/qiime/ETALON/makearar.py > arare.sh;alpha_rarefaction.py -i otus_sort.biom -m Fasting_Map.txt -o arare -p /home/qiime/ETALON/alpha_params.txt -t open/rep_set.tre;beta_diversity_through_plots.py -i otus_sort.biom -o beta -m Fasting_Map.txt -t open/rep_set.tre -a;make_3d_plots.py -i /beta/unweighted_unifrac_pc.txt -m Fasting_Map.txt -o 3d_plots/;make_2d_plots.py -i beta/unweighted_unifrac_pc.txt -m Fasting_Map.txt -o 2d_plots/;make_2d_plots.py -i beta/weighted_unifrac_pc.txt -m Fasting_Map.txt -o 2d_plots/
+
+
+
+
+
+
+
+
+
+
+;python3 /home/qiime/ETALON/chimerasc.py > chimerac.sh;bash chimerac.sh;mkdir results;cp -r arare/alpha_rarefaction_plots results;cp -r beta/unweighted_unifrac_emperor_pcoa_plot results;cp -r beta/weighted_unifrac_emperor_pcoa_plot results;cp -r taxasum results;cp -r otchet.txt  results;cp -r chimerac.txt  results;cp -r alpha.txt results;zip -r results results
+
+
+
+
